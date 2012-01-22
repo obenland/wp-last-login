@@ -18,16 +18,16 @@ Currently available in:
 
 * Arabic
 * Chinese
-* Franais
+* Fran&ccedil;ais
 * Deutsch
 * English
-* Espa–ol
+* Espa&ntilde;ol
 * Italiano
 * Japanese
 * Nederlands
 * Polski
-* Portugus
-* Rom‰n
+* Portugu&ecirc;s
+* Rom&acirc;n
 * Russian
 
 
