@@ -30,12 +30,6 @@ msgstr "Spenden"
 msgid "WP Last Login"
 msgstr ""
 
-#. translators: plugin header field 'PluginURI'
-#: wp-last-login.php:0
-#@ wp-last-login
-msgid "http://www.obenlands.de/en/portfolio/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login"
-msgstr ""
-
 #. translators: plugin header field 'Description'
 #: wp-last-login.php:0
 #@ wp-last-login
@@ -48,25 +42,31 @@ msgstr "Zeigt das Datum der letzten Anmeldung in Benutzer-Listen."
 msgid "Konstantin Obenland"
 msgstr ""
 
-#. translators: plugin header field 'AuthorURI'
-#: wp-last-login.php:0
-#@ wp-last-login
-msgid "http://www.obenlands.de/en/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login"
-msgstr ""
-
-#. translators: plugin header field 'Version'
-#: wp-last-login.php:0
-#@ wp-last-login
-msgid "1.0"
-msgstr ""
-
-#: wp-last-login.php:100
+#: wp-last-login.php:120
 #@ wp-last-login
 msgid "Last Login"
 msgstr "Letzter Login"
 
-#: wp-last-login.php:127
+#: wp-last-login.php:148
 #@ wp-last-login
 msgid "Never."
 msgstr "Noch nie."
+
+#. translators: plugin header field 'Version'
+#: wp-last-login.php:0
+#@ wp-last-login
+msgid "1.1.0"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#: wp-last-login.php:0
+#@ wp-last-login
+msgid "http://en.wp.obenland.it/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login"
+msgstr "http://wp.obenland.it/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login"
+
+#. translators: plugin header field 'AuthorURI'
+#: wp-last-login.php:0
+#@ wp-last-login
+msgid "http://en.wp.obenland.it/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login"
+msgstr "http://wp.obenland.it/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login"
 

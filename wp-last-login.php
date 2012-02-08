@@ -2,20 +2,21 @@
 /** wp-last-login.php
  *
  * Plugin Name:	WP Last Login
- * Plugin URI:	http://www.obenlands.de/en/2012/01/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
+ * Plugin URI:	http://en.wp.obenland.it/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description:	Displays the date of the last login in user lists.
- * Version:		1.0
+ * Version:		1.1.0
  * Author:		Konstantin Obenland
- * Author URI:	http://www.obenlands.de/en/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
+ * Author URI:	http://en.wp.obenland.it/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
  * Domain Path: /lang
  * License:		GPLv2
  */
 
 
-if( ! class_exists('Obenland_Wp_Plugins') ) {
-	require_once('obenland-wp-plugins.php');
+if ( ! class_exists( 'Obenland_Wp_Plugins' ) ) {
+	require_once( 'obenland-wp-plugins.php' );
 }
+
 
 
 class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
@@ -49,22 +50,41 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 			'count_login'
 		));
 		
-		foreach ( array('manage_users_columns', 'wpmu_users_columns') as $hook ) {
-			add_filter( $hook, array(
+		/**
+		 * Programmers:
+		 * To limit this information to certain user roles, add a filter to
+		 * 'wpll_current_user_can' and check for user permissions, returning
+		 * true or false!
+		 *
+		 * Example:
+		 *
+		 * function prefix_wpll_visibility( $bool ) {
+		 * 		return current_user_can( 'manage_options' ); // Only for Admins
+		 * }
+		 * add_filter( 'wpll_current_user_can', 'prefix_wpll_visibility' );
+		 *
+		 */
+		if ( is_admin() AND apply_filters( 'wpll_current_user_can', true ) ) {
+			
+			foreach ( array('manage_site-users-network', 'manage_users', 'wpmu_users') as $hook ) {
+				add_filter( "{$hook}_columns", array(
+					&$this,
+					'add_column'
+				), 1);
+			}
+			
+			add_filter( 'manage_users_custom_column', array(
 				&$this,
-				'add_column'
-			), 1);
+				'manage_custom_column'
+			), 10, 3);
+			
+			foreach ( array('admin_print_styles-site-users.php', 'admin_print_styles-users.php') as $hook ) {
+				add_filter( $hook, array(
+					&$this,
+					'column_style'
+				));
+			}
 		}
-
-		add_filter( 'manage_users_custom_column', array(
-			&$this,
-			'manage_custom_column'
-		), 10, 3);
-		
-		add_action( 'admin_print_styles-users.php', array(
-			&$this,
-			'column_style'
-		));
 	}
 
 		
@@ -101,7 +121,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 		return $cols;
     }
 
-	
+    
 	/**
 	 * Adds the last login column to the network admin user list
 	 *
@@ -113,7 +133,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 	 * @param	string	$column_name	The name of the column
 	 * @param	int		$user_id		The user's id
 	 *
-	 * @return	array
+	 * @return	string
 	 */
 	public function manage_custom_column( $empty, $column_name, $user_id ) {
 		
@@ -139,12 +159,12 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 	 *
 	 * @return	void
 	 */
-	public function column_style(){
-		$style	=	'<style type="text/css">' . "\n"
-				.	'	.column-wp-last-login { width: 8%; }' . "\n"
-				.	'</style>'  ."\n";
-
-		echo $style;
+	public function column_style() {
+		?>
+		<style type="text/css">
+			.column-wp-last-login { width: 9%; }
+		</style>
+		<?php
 	}
 
 }  // End of class Obenland_Wp_Last_Login

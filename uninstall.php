@@ -4,13 +4,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' )){
 	wp_die('WP_UNINSTALL_PLUGIN undefined.');
 }
 
-$users = get_users(array(
+$user_ids	=	get_users(array(
 	'blog_id'	=>	'',
 	'fields'	=>	'ID'
 ));
 
-foreach ( $users as $user ) {
-	delete_user_meta( $user->ID, 'wp-last-login' );
+foreach ( $user_ids as $user_id ) {
+	delete_user_meta( $user_id, 'wp-last-login' );
 }
 
 /* Goodbye! Thank you for having me! */
