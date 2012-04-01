@@ -4,7 +4,7 @@
  * Plugin Name:	WP Last Login
  * Plugin URI:	http://en.wp.obenland.it/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description:	Displays the date of the last login in user lists.
- * Version:		1.1.0
+ * Version:		1.1.1
  * Author:		Konstantin Obenland
  * Author URI:	http://en.wp.obenland.it/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
@@ -13,13 +13,12 @@
  */
 
 
-if ( ! class_exists( 'Obenland_Wp_Plugins' ) ) {
+if ( ! class_exists('Obenland_Wp_Plugins_v15') ) {
 	require_once( 'obenland-wp-plugins.php' );
 }
 
 
-
-class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
+class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v15 {
 	
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -39,16 +38,13 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 		
 		parent::__construct( array(
 			'textdomain'		=>	'wp-last-login',
-			'plugin_name'		=>	plugin_basename(__FILE__),
+			'plugin_path'		=>	__FILE__,
 			'donate_link_id'	=>	'K32M878XHREQC'
 		));
 		
-		load_plugin_textdomain( 'wp-last-login', false, 'wp-last-login/lang');
+		load_plugin_textdomain( 'wp-last-login', false, 'wp-last-login/lang' );
 		
-		add_action( 'wp_login', array(
-			&$this,
-			'count_login'
-		));
+		$this->hook( 'wp_login' );
 		
 		/**
 		 * Programmers:
@@ -66,24 +62,12 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 		 */
 		if ( is_admin() AND apply_filters( 'wpll_current_user_can', true ) ) {
 			
-			foreach ( array('manage_site-users-network', 'manage_users', 'wpmu_users') as $hook ) {
-				add_filter( "{$hook}_columns", array(
-					&$this,
-					'add_column'
-				), 1);
-			}
-			
-			add_filter( 'manage_users_custom_column', array(
-				&$this,
-				'manage_custom_column'
-			), 10, 3);
-			
-			foreach ( array('admin_print_styles-site-users.php', 'admin_print_styles-users.php') as $hook ) {
-				add_filter( $hook, array(
-					&$this,
-					'column_style'
-				));
-			}
+			$this->hook( 'manage_site-users-network_columns',	'add_column',	1 );
+			$this->hook( 'manage_users_columns',				'add_column',	1 );
+			$this->hook( 'wpmu_users_columns',					'add_column',	1 );
+			$this->hook( 'admin_print_styles-users.php',		'column_style' );
+			$this->hook( 'admin_print_styles-site-users.php',	'column_style' );
+			$this->hook( 'manage_users_custom_column' );
 		}
 	}
 
@@ -99,7 +83,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 	 *
 	 * @return	void
 	 */
-	public function count_login( $user_login ) {
+	public function wp_login( $user_login ) {
 		$user	=	get_user_by( 'login', $user_login );
 		update_user_meta( $user->ID, $this->textdomain, time() );
 	}
@@ -135,7 +119,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins {
 	 *
 	 * @return	string
 	 */
-	public function manage_custom_column( $empty, $column_name, $user_id ) {
+	public function manage_users_custom_column( $empty, $column_name, $user_id ) {
 		
 		if ( $this->textdomain == $column_name ) {
 			$last_login	=	get_user_meta( $user_id, $this->textdomain, true );

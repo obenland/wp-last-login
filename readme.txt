@@ -4,7 +4,7 @@ Tags: admin, user, login, last login, plugin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 
 Make the last login for each user visibile in the user overview.
 
@@ -49,6 +49,9 @@ None asked yet.
 
 
 == Changelog ==
+
+= 1.1.1 =
+* Updated utility class
 
 = 1.1.0 =
 * Made the display of the column filterable
