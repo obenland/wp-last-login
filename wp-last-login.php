@@ -2,23 +2,23 @@
 /** wp-last-login.php
  *
  * Plugin Name:	WP Last Login
- * Plugin URI:	http://en.wp.obenland.it/wp-last-login/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
+ * Plugin URI:	http://en.wp.obenland.it/wp-last-login/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description:	Displays the date of the last login in user lists.
  * Version:		1.1.2
  * Author:		Konstantin Obenland
- * Author URI:	http://en.wp.obenland.it/?utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
+ * Author URI:	http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
  * Domain Path: /lang
  * License:		GPLv2
  */
 
 
-if ( ! class_exists('Obenland_Wp_Plugins_v15') ) {
+if ( ! class_exists( 'Obenland_Wp_Plugins_v300' ) ) {
 	require_once( 'obenland-wp-plugins.php' );
 }
 
 
-class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v15 {
+class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
 	
 	
 	///////////////////////////////////////////////////////////////////////////
