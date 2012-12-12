@@ -4,9 +4,9 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	wp_die( 'WP_UNINSTALL_PLUGIN undefined.' );
 }
 
-$user_ids	=	get_users( array(
-	'blog_id'	=>	'',
-	'fields'	=>	'ID'
+$user_ids = get_users( array(
+	'blog_id' => '',
+	'fields'  => 'ID'
 ) );
 
 foreach ( $user_ids as $user_id ) {

@@ -2,8 +2,8 @@
 Contributors: kobenland
 Tags: admin, user, login, last login, plugin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
-Requires at least: 3.0
-Tested up to: 3.4
+Requires at least: 3.1
+Tested up to: 3.5
 Stable tag: 1.2.0
 
 Make the last login for each user visibile in the user overview.
@@ -11,6 +11,7 @@ Make the last login for each user visibile in the user overview.
 == Description ==
 
 This plugin adds an extra column to the users overview with the date of the last login for each user.
+Additionally, users can be sorted by the date of their last login.
 
 = Translations =
 I will be more than happy to update the plugin with new locales, as soon as I receive them!
@@ -51,6 +52,7 @@ None asked yet.
 == Changelog ==
 
 = 1.2.0 =
+* Users are now sortable by last login!
 * Updated utility class
 
 = 1.1.2 =
