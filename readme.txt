@@ -1,5 +1,5 @@
 === WP Last Login ===
-Contributors: kobenland
+Contributors: obenland
 Tags: admin, user, login, last login, plugin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.1
