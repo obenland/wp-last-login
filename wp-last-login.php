@@ -13,12 +13,11 @@
  */
 
 
-if ( ! class_exists( 'Obenland_Wp_Plugins_v300' ) ) {
+if ( ! class_exists( 'Obenland_Wp_Plugins_v301' ) )
 	require_once( 'obenland-wp-plugins.php' );
-}
 
 
-class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
+class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -28,18 +27,18 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
 	/**
 	 * Constructor
 	 *
-	 * @author	Konstantin Obenland
-	 * @since	1.0 - 23.01.2012
-	 * @access	public
+	 * @author Konstantin Obenland
+	 * @since  1.0 - 23.01.2012
+	 * @access public
 	 *
-	 * @return	Obenland_Wp_Last_Login
+	 * @return Obenland_Wp_Last_Login
 	 */
 	public function __construct() {
 
 		parent::__construct( array(
 			'textdomain'     => 'wp-last-login',
 			'plugin_path'    => __FILE__,
-			'donate_link_id' => 'K32M878XHREQC'
+			'donate_link_id' => 'K32M878XHREQC',
 		) );
 
 		load_plugin_textdomain( 'wp-last-login', false, 'wp-last-login/lang' );
@@ -86,8 +85,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
 	 *
 	 * @return void
 	 */
-	public function wp_login( $user_login ) {
-		$user = get_user_by( 'login', $user_login );
+	public function wp_login( $user_login, $user ) {
 		update_user_meta( $user->ID, $this->textdomain, time() );
 	}
 
@@ -125,14 +123,13 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
 	public function manage_users_custom_column( $value, $column_name, $user_id ) {
 
 		if ( $this->textdomain == $column_name ) {
-			$last_login = get_user_meta( $user_id, $this->textdomain, true );
+			$value      = __( 'Never.', 'wp-last-login' );
+			$last_login = (int) get_user_meta( $user_id, $this->textdomain, true );
 
 			if ( $last_login ) {
 				$format = apply_filters( 'wpll_date_format', get_option( 'date_format' ) );
-				return date_i18n( $format, $last_login );
+				$value  = date_i18n( $format, $last_login );
 			}
-
-			return __( 'Never.', 'wp-last-login' );
 		}
 
 		return $value;
@@ -172,7 +169,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
 		if ( isset( $vars['orderby'] ) && $this->textdomain == $vars['orderby'] ) {
 			$vars = array_merge( $vars, array(
 				'meta_key' => $this->textdomain,
-				'orderby'  => 'meta_value_num'
+				'orderby'  => 'meta_value_num',
 			) );
 		}
 
@@ -197,7 +194,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v300 {
 		<?php
 	}
 
-}  // End of class Obenland_Wp_Last_Login
+} // End of class Obenland_Wp_Last_Login.
 
 
 new Obenland_Wp_Last_Login;
