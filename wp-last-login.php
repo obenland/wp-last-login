@@ -4,7 +4,7 @@
  * Plugin Name: WP Last Login
  * Plugin URI:  http://en.wp.obenland.it/wp-last-login/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description: Displays the date of the last login in user lists.
- * Version:     1.2.1
+ * Version:     1.3.0
  * Author:      Konstantin Obenland
  * Author URI:  http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
@@ -25,7 +25,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 	///////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @author Konstantin Obenland
 	 * @since  1.0 - 23.01.2012
@@ -34,7 +34,6 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 	 * @return Obenland_Wp_Last_Login
 	 */
 	public function __construct() {
-
 		parent::__construct( array(
 			'textdomain'     => 'wp-last-login',
 			'plugin_path'    => __FILE__,
@@ -75,13 +74,13 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 	/**
-	 * Update the login timestamp
+	 * Update the login timestamp.
 	 *
 	 * @author Konstantin Obenland
 	 * @since  1.0 - 23.01.2012
 	 * @access public
 	 *
-	 * @param  string $user_login The user's login name
+	 * @param  string $user_login The user's login name.
 	 *
 	 * @return void
 	 */
@@ -92,13 +91,13 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 	/**
-	 * Adds the last login column to the network admin user list
+	 * Adds the last login column to the network admin user list.
 	 *
 	 * @author Konstantin Obenland
 	 * @since  1.0 - 23.01.2012
 	 * @access public
 	 *
-	 * @param  array $cols The default columns
+	 * @param  array $cols The default columns.
 	 *
 	 * @return array
 	 */
@@ -109,20 +108,19 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 	/**
-	 * Adds the last login column to the network admin user list
+	 * Adds the last login column to the network admin user list.
 	 *
 	 * @author Konstantin Obenland
 	 * @since  1.0 - 23.01.2012
 	 * @access public
 	 *
-	 * @param  string $value       Value of the custom column
-	 * @param  string $column_name The name of the column
-	 * @param  int    $user_id     The user's id
+	 * @param  string $value       Value of the custom column.
+	 * @param  string $column_name The name of the column.
+	 * @param  int    $user_id     The user's id.
 	 *
 	 * @return string
 	 */
 	public function manage_users_custom_column( $value, $column_name, $user_id ) {
-
 		if ( $this->textdomain == $column_name ) {
 			$value      = __( 'Never.', 'wp-last-login' );
 			$last_login = (int) get_user_meta( $user_id, $this->textdomain, true );
@@ -138,7 +136,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 	/**
-	 * Register the column as sortable
+	 * Register the column as sortable.
 	 *
 	 * @author Konstantin Obenland
 	 * @since  1.2.0 - 11.12.2012
@@ -156,13 +154,13 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 	/**
-	 * Handle ordering by last login
+	 * Handle ordering by last login.
 	 *
 	 * @author Silviu-Cristian Burca
 	 * @since  1.2.0 - 11.12.2012
 	 * @access public
 	 *
-	 * @param  array $vars Request arguments
+	 * @param  array $vars Request arguments.
 	 *
 	 * @return array
 	 */

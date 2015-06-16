@@ -3,8 +3,8 @@ Contributors: obenland
 Tags: admin, user, login, last login, plugin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.1
-Tested up to: 3.6
-Stable tag: 1.2.1
+Tested up to: 4.0
+Stable tag: 1.3.0
 
 Make the last login for each user visibile in the user overview.
 
@@ -50,6 +50,10 @@ None asked yet.
 
 
 == Changelog ==
+
+= 1.3.0 =
+* Maintenance release.
+* Tested with WordPress 4.0.
 
 = 1.2.1 =
 * Reverts changes to wp_login() as the second argument seems not to be set at all times.
