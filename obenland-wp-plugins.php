@@ -87,10 +87,9 @@ class Obenland_Wp_Plugins_v301 {
 	 * @since  1.0 - 23.03.2011
 	 * @access public
 	 *
-	 * @param  string $plugin_name
-	 * @param  string $donate_link_id
+	 * @param  array $args
 	 *
-	 * @return Obenland_Wp_Plugins
+	 * @return Obenland_Wp_Plugins_v301
 	 */
 	public function __construct( $args = array() ) {
 
@@ -171,7 +170,7 @@ class Obenland_Wp_Plugins_v301 {
 				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 					<input type="hidden" name="cmd" value="_s-xclick">
 					<input type="hidden" name="hosted_button_id" value="G65Y5CM3HVRNY">
-					<input type="image" src="https://www.paypalobjects.com/<?php echo get_locale(); ?>/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal Ñ The safer, easier way to pay online.">
+					<input type="image" src="https://www.paypalobjects.com/<?php echo get_locale(); ?>/i/btn/btn_donate_LG.gif" border="0" name="submit">
 					<img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
 				</form>
 				<p><?php _e( 'Or you could:', 'obenland-wp' ); ?></p>

@@ -4,7 +4,7 @@
  * Plugin Name: WP Last Login
  * Plugin URI:  http://en.wp.obenland.it/wp-last-login/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description: Displays the date of the last login in user lists.
- * Version:     1.3.0
+ * Version:     1.4.0
  * Author:      Konstantin Obenland
  * Author URI:  http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
@@ -13,8 +13,9 @@
  */
 
 
-if ( ! class_exists( 'Obenland_Wp_Plugins_v301' ) )
+if ( ! class_exists( 'Obenland_Wp_Plugins_v301' ) ) {
 	require_once( 'obenland-wp-plugins.php' );
+}
 
 
 class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
@@ -58,7 +59,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 		 * add_filter( 'wpll_current_user_can', 'prefix_wpll_visibility' );
 		 *
 		 */
-		if ( is_admin() AND apply_filters( 'wpll_current_user_can', true ) ) {
+		if ( is_admin() && apply_filters( 'wpll_current_user_can', true ) ) {
 
 			$this->hook( 'manage_site-users-network_columns',     'add_column', 1 );
 			$this->hook( 'manage_users_columns',                  'add_column', 1 );
@@ -68,7 +69,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 			$this->hook( 'manage_users_custom_column'                             );
 			$this->hook( 'manage_users_sortable_columns',         'add_sortable'  );
 			$this->hook( 'manage_users-network_sortable_columns', 'add_sortable'  );
-			$this->hook( 'request'                                                );
+			$this->hook( 'pre_get_users'                                          );
 		}
 	}
 
@@ -156,23 +157,22 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 	/**
 	 * Handle ordering by last login.
 	 *
-	 * @author Silviu-Cristian Burca
 	 * @since  1.2.0 - 11.12.2012
 	 * @access public
 	 *
-	 * @param  array $vars Request arguments.
+	 * @param  WP_User_Query $user_query Request arguments.
 	 *
-	 * @return array
+	 * @return WP_User_Query
 	 */
-	public function request( $vars ) {
-		if ( isset( $vars['orderby'] ) && $this->textdomain == $vars['orderby'] ) {
-			$vars = array_merge( $vars, array(
+	public function pre_get_users( $user_query ) {
+		if ( isset( $user_query->query_vars['orderby'] ) && $this->textdomain == $user_query->query_vars['orderby'] ) {
+			$user_query->query_vars = array_merge( $user_query->query_vars, array(
 				'meta_key' => $this->textdomain,
 				'orderby'  => 'meta_value_num',
 			) );
 		}
 
-		return $vars;
+		return $user_query;
 	}
 
 
@@ -197,6 +197,26 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 
 
 new Obenland_Wp_Last_Login;
+
+/**
+ * Sets a default meta value for all users.
+ *
+ * Allows sorting users by last login to work, even though some might not have
+ * recorded login time.
+ *
+ * @see https://wordpress.org/support/topic/wp-40-sorting-by-date-doesnt-work
+ */
+function wpll_activate() {
+	$user_ids = get_users( array(
+		'blog_id' => '',
+		'fields'  => 'ID',
+	) );
+
+	foreach ( $user_ids as $user_id ) {
+		update_user_meta( $user_id, 'wp-last-login', 0 );
+	}
+}
+register_activation_hook( __FILE__, 'wpll_activate' );
 
 
 /* End of file wp-last-login.php */
