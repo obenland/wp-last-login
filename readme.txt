@@ -3,8 +3,8 @@ Contributors: obenland
 Tags: admin, user, login, last login, plugin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.1
-Tested up to: 3.5
-Stable tag: 1.2.0
+Tested up to: 4.3
+Stable tag: 1.4.0
 
 Make the last login for each user visibile in the user overview.
 
@@ -19,17 +19,17 @@ Currently available in:
 
 * Arabic
 * Chinese
-* Fran&ccedil;ais
-* Deutsch
+* French
 * English
-* Espa&ntilde;ol
-* Italiano
+* German
+* Italian
 * Japanese
 * Nederlands
-* Polski
-* Portugu&ecirc;s
-* Rom&acirc;n
+* Polish
+* Portuguese
+* Rumanian
 * Russian
+* Spanish
 
 
 == Installation ==
@@ -51,22 +51,34 @@ None asked yet.
 
 == Changelog ==
 
+= 1.4.0 =
+* Fixed a long standing bug, where sorting users by last login didn't work.
+* Tested with WordPress 4.3.
+
+= 1.3.0 =
+* Maintenance release.
+* Tested with WordPress 4.0.
+
+= 1.2.1 =
+* Reverts changes to wp_login() as the second argument seems not to be set at all times.
+
 = 1.2.0 =
 * Users are now sortable by last login!
-* Updated utility class
+* Updated utility class.
+* Added Danish translation. Props thomasclausen.
 
 = 1.1.2 =
 * Fixed a bug where content of other custom columns were not displayed.
 
 = 1.1.1 =
-* Updated utility class
+* Updated utility class.
 
 = 1.1.0 =
-* Made the display of the column filterable
-* Widened the column a bit to accomodate for large date strings
+* Made the display of the column filterable.
+* Widened the column a bit to accomodate for large date strings.
 
 = 1.0 =
-* Initial Release
+* Initial Release.
 
 
 == Upgrade Notice ==
