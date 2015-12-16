@@ -127,7 +127,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 			$last_login = (int) get_user_meta( $user_id, $this->textdomain, true );
 
 			if ( $last_login ) {
-				$format = apply_filters( 'wpll_date_format', get_option( 'date_format' ) );
+				$format = apply_filters( 'wpll_date_format', get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
 				$value  = date_i18n( $format, $last_login );
 			}
 		}
@@ -194,7 +194,6 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_v301 {
 	}
 
 } // End of class Obenland_Wp_Last_Login.
-
 
 new Obenland_Wp_Last_Login;
 
