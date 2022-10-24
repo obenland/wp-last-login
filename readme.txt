@@ -3,10 +3,10 @@ Contributors: obenland
 Tags: admin, user, login, last login, plugin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.1
-Tested up to: 4.3
-Stable tag: 1.4.0
+Tested up to: 5.8
+Stable tag: 4
 
-Make the last login for each user visibile in the user overview.
+Make the last login for each user visible in the user overview.
 
 == Description ==
 
@@ -25,6 +25,7 @@ Currently available in:
 * Italian
 * Japanese
 * Nederlands
+* Norwegian (bokmål)
 * Polish
 * Portuguese
 * Rumanian
@@ -50,6 +51,17 @@ None asked yet.
 
 
 == Changelog ==
+
+= 4 =
+* Improved date display to account for the timezone of the site. Props @knutsp.
+
+= 3 =
+* Fixed a bug where users who haven't logged in disappear from user lists when ordering by last login. See https://wordpress.org/support/topic/new-users-dont-get-the-meta-field/
+
+= 2 =
+* Maintenance release.
+* Updated code to adhere to WordPress Coding Standards.
+* Tested with WordPress 5.0.
 
 = 1.4.0 =
 * Fixed a long standing bug, where sorting users by last login didn't work.
