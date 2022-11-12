@@ -1,10 +1,10 @@
 === WP Last Login ===
 Contributors: obenland
-Tags: admin, user, login, last login, plugin
+Tags: admin, user, login, last login, plugin, login time, login date
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.1
-Tested up to: 5.8
-Stable tag: 4
+Tested up to: 6.1
+Stable tag: 5
 
 Make the last login for each user visible in the user overview.
 
@@ -51,6 +51,11 @@ None asked yet.
 
 
 == Changelog ==
+
+= 5 =
+* Improved uninstall routine (no longer queries all users).
+* Updated utility class.
+* Tested with WordPress 6.1.
 
 = 4 =
 * Improved date display to account for the timezone of the site. Props @knutsp.
