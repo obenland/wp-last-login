@@ -16,11 +16,13 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_V5 {
 	 * @since 1.0 - 23.01.2012
 	 */
 	public function __construct() {
-		parent::__construct( array(
-			'textdomain'     => 'wp-last-login',
-			'plugin_path'    => __DIR__ . '/wp-last-login.php',
-			'donate_link_id' => 'K32M878XHREQC',
-		) );
+		parent::__construct(
+			array(
+				'textdomain'     => 'wp-last-login',
+				'plugin_path'    => __DIR__ . '/wp-last-login.php',
+				'donate_link_id' => 'K32M878XHREQC',
+			)
+		);
 
 		load_plugin_textdomain( 'wp-last-login', false, 'wp-last-login/lang' );
 
@@ -111,7 +113,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_V5 {
 				 * @param string $format Date format. Default: `date_format` option value.
 				 */
 				$format     = apply_filters( 'wpll_date_format', get_option( 'date_format' ) );
-				$last_login = get_date_from_gmt( date( 'Y-m-d H:i:s', $last_login ), 'U' );
+				$last_login = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $last_login ), 'U' );
 				$value      = date_i18n( $format, $last_login );
 			}
 		}
@@ -146,7 +148,7 @@ class Obenland_Wp_Last_Login extends Obenland_Wp_Plugins_V5 {
 			$user_query->query_vars = array_merge(
 				$user_query->query_vars,
 				array(
-					'meta_key' => $this->textdomain,
+					'meta_key' => $this->textdomain, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 					'orderby'  => 'meta_value_num',
 				)
 			);
