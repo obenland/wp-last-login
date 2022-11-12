@@ -1,0 +1,15 @@
+# Directories
+/.git
+/.github
+/.idea
+/.wordpress-org
+/bin
+/node_modules
+/tests
+
+# Files
+.distignore
+composer.json
+package.json
+package-lock.json
+phpunit.xml
