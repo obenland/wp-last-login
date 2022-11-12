@@ -3,7 +3,7 @@
  * Plugin Name: WP Last Login
  * Plugin URI:  http://en.wp.obenland.it/wp-last-login/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description: Displays the date of the last login in user lists.
- * Version:     4
+ * Version:     5
  * Author:      Konstantin Obenland
  * Author URI:  http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
