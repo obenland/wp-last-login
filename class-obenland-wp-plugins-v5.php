@@ -3,14 +3,14 @@
  * Obenland plugin base class.
  *
  * @author  Konstantin Obenland
- * @version 4
+ * @version 5
  * @package Obenland Plugins
  */
 
 /**
- * Class Obenland_Wp_Plugins_V4
+ * Class Obenland_Wp_Plugins_V5
  */
-class Obenland_Wp_Plugins_V4 {
+class Obenland_Wp_Plugins_V5 {
 
 	/**
 	 * The plugins' text domain.
@@ -23,7 +23,6 @@ class Obenland_Wp_Plugins_V4 {
 	 */
 	protected $textdomain;
 
-
 	/**
 	 * The name of the calling plugin.
 	 *
@@ -35,7 +34,6 @@ class Obenland_Wp_Plugins_V4 {
 	 */
 	protected $plugin_name;
 
-
 	/**
 	 * The donate link for the plugin.
 	 *
@@ -46,7 +44,6 @@ class Obenland_Wp_Plugins_V4 {
 	 * @var    string
 	 */
 	protected $donate_link;
-
 
 	/**
 	 * The path to the plugin file.
@@ -60,7 +57,6 @@ class Obenland_Wp_Plugins_V4 {
 	 * @var    string
 	 */
 	protected $plugin_path;
-
 
 	/**
 	 * The path to the plugin directory.
@@ -103,7 +99,6 @@ class Obenland_Wp_Plugins_V4 {
 		$this->hook( 'plugins_loaded', 'parent_plugins_loaded' );
 	}
 
-
 	/**
 	 * Hooks in all the hooks :)
 	 *
@@ -113,13 +108,7 @@ class Obenland_Wp_Plugins_V4 {
 	 */
 	public function parent_plugins_loaded() {
 		$this->hook( 'plugin_row_meta' );
-
-		if ( ! has_action( 'obenland_side_info_column' ) ) {
-			$this->hook( 'obenland_side_info_column', 'donate_box', 1 );
-			$this->hook( 'obenland_side_info_column', 'feed_box' );
-		}
 	}
-
 
 	/**
 	 * Adds a Donate link to our plugin row.
@@ -130,8 +119,7 @@ class Obenland_Wp_Plugins_V4 {
 	 *
 	 * @param  array  $plugin_meta Existing plugin meta.
 	 * @param  string $plugin_file Plugin slug.
-	 *
-	 * @return string
+	 * @return array
 	 */
 	public function plugin_row_meta( $plugin_meta, $plugin_file ) {
 		if ( $this->plugin_name === $plugin_file ) {
@@ -141,12 +129,12 @@ class Obenland_Wp_Plugins_V4 {
 				__( 'Donate', 'obenland-wp' )
 			);
 		}
+
 		return $plugin_meta;
 	}
 
-
 	/**
-	 * Displays a box with a donate button and call to action links.
+	 * Displays a box with a donate button and call-to-action links.
 	 *
 	 * Props Joost de Valk, as this is almost entirely from his awesome WordPress
 	 * SEO Plugin.
@@ -156,8 +144,6 @@ class Obenland_Wp_Plugins_V4 {
 	 * @author Joost de Valk, Konstantin Obenland
 	 * @since  2.0.0 - 31.03.2012
 	 * @access public
-	 *
-	 * @return void
 	 */
 	public function donate_box() {
 		$plugin_data = get_plugin_data( $this->plugin_path );
@@ -169,7 +155,7 @@ class Obenland_Wp_Plugins_V4 {
 					<strong>
 						<?php
 						printf(
-							/* translators: Plugin name. */
+						/* translators: Plugin name. */
 							esc_html_x( 'Want to help make this plugin even better? All donations are used to improve %1$s, so donate $20, $50 or $100 now!', 'Plugin Name', 'obenland-wp' ),
 							esc_html( $plugin_data['Name'] )
 						);
@@ -179,19 +165,18 @@ class Obenland_Wp_Plugins_V4 {
 				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 					<input type="hidden" name="cmd" value="_s-xclick">
 					<input type="hidden" name="hosted_button_id" value="G65Y5CM3HVRNY">
-					<input type="image" src="https://www.paypalobjects.com/<?php echo esc_attr( get_locale() ); ?>/i/btn/btn_donate_LG.gif" border="0" name="submit">
+					<input type="image" alt="" src="https://www.paypalobjects.com/<?php echo esc_attr( get_locale() ); ?>/i/btn/btn_donate_LG.gif" border="0" name="submit">
 					<img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
 				</form>
 				<p><?php esc_html_e( 'Or you could:', 'obenland-wp' ); ?></p>
 				<ul>
-					<li><a href="http://wordpress.org/extend/plugins/wp-approve-user/"><?php esc_html_e( 'Rate the plugin 5&#9733; on WordPress.org', 'obenland-wp' ); ?></a></li>
+					<li><a href="https://wordpress.org/plugins/wp-approve-user/"><?php esc_html_e( 'Rate the plugin 5&#9733; on WordPress.org', 'obenland-wp' ); ?></a></li>
 					<li><a href="<?php echo esc_url( $plugin_data['PluginURI'] ); ?>"><?php esc_html_e( 'Blog about it &amp; link to the plugin page', 'obenland-wp' ); ?></a></li>
 				</ul>
 			</div>
 		</div>
 		<?php
 	}
-
 
 	/**
 	 * Displays a box with feed items and social media links.
@@ -204,13 +189,10 @@ class Obenland_Wp_Plugins_V4 {
 	 * @author Joost de Valk, Konstantin Obenland
 	 * @since  2.0.0 - 31.03.2012
 	 * @access public
-	 *
-	 * @return void
 	 */
 	public function feed_box() {
-
 		include_once ABSPATH . WPINC . '/feed.php';
-		$feed_url = 'http://en.wp.obenland.it/feed/';
+		$feed_url = 'https://konstantin.obenland.it/feed/';
 		$rss      = fetch_feed( $feed_url );
 
 		// Bail if feed doesn't work.
@@ -234,25 +216,24 @@ class Obenland_Wp_Plugins_V4 {
 			<div class="inside">
 				<ul>
 					<?php if ( ! $rss_items ) : ?>
-					<li><?php esc_html_e( 'No news items, feed might be broken...', 'obenland-wp' ); ?></li>
-					<?php
+						<li><?php esc_html_e( 'No news items, feed might be broken...', 'obenland-wp' ); ?></li>
+						<?php
 					else :
 						foreach ( $rss_items as $item ) :
 							$url = preg_replace( '/#.*/', '#utm_source=WordPress&utm_medium=sidebannerpostbox&utm_term=rssitem&utm_campaign=' . $this->textdomain, $item->get_permalink() );
-					?>
-						<li><a class="rsswidget" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $item->get_title() ); ?></a></li>
-						<?php
+							?>
+							<li><a class="rsswidget" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $item->get_title() ); ?></a></li>
+							<?php
 						endforeach;
 					endif;
 					?>
-					<li class="twitter"><a href="http://twitter.com/obenland"><?php esc_html_e( 'Follow Konstantin on Twitter', 'obenland-wp' ); ?></a></li>
+					<li class="twitter"><a href="https://twitter.com/obenland"><?php esc_html_e( 'Follow Konstantin on Twitter', 'obenland-wp' ); ?></a></li>
 					<li class="rss"><a href="<?php echo esc_url( $feed_url ); ?>"><?php esc_html_e( 'Subscribe via RSS', 'obenland-wp' ); ?></a></li>
 				</ul>
 			</div>
 		</div>
 		<?php
 	}
-
 
 	/**
 	 * Hooks methods to their WordPress Actions and Filters.
@@ -277,7 +258,7 @@ class Obenland_Wp_Plugins_V4 {
 		$args     = func_get_args();
 		unset( $args[0] ); // Filter name.
 
-		foreach ( (array) $args as $arg ) {
+		foreach ( $args as $arg ) {
 			if ( is_int( $arg ) ) {
 				$priority = $arg;
 			} else {
@@ -287,7 +268,6 @@ class Obenland_Wp_Plugins_V4 {
 
 		return add_action( $hook, array( $this, $method ), $priority, 999 );
 	}
-
 
 	/**
 	 * Sets the donate link.
@@ -299,12 +279,14 @@ class Obenland_Wp_Plugins_V4 {
 	 * @param  string $donate_link_id Donate link ID.
 	 */
 	protected function set_donate_link( $donate_link_id ) {
-		$this->donate_link = add_query_arg( array(
-			'cmd'              => '_s-xclick',
-			'hosted_button_id' => $donate_link_id,
-		), 'https://www.paypal.com/cgi-bin/webscr' );
+		$this->donate_link = add_query_arg(
+			array(
+				'cmd'              => '_s-xclick',
+				'hosted_button_id' => $donate_link_id,
+			),
+			'https://www.paypal.com/cgi-bin/webscr'
+		);
 	}
-
 
 	/**
 	 * Sanitizes method names.
@@ -321,5 +303,4 @@ class Obenland_Wp_Plugins_V4 {
 	private function sanitize_method( $method ) {
 		return str_replace( array( '.', '-' ), '_', $method );
 	}
-
-} // End of class Obenland_Wp_Plugins.
+}
