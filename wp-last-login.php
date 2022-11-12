@@ -29,10 +29,12 @@ new Obenland_Wp_Last_Login();
  * @see https://wordpress.org/support/topic/wp-40-sorting-by-date-doesnt-work
  */
 function wpll_activate() {
-	$user_ids = get_users( array(
-		'blog_id' => '',
-		'fields'  => 'ID',
-	) );
+	$user_ids = get_users(
+		array(
+			'blog_id' => '',
+			'fields'  => 'ID',
+		)
+	);
 
 	foreach ( $user_ids as $user_id ) {
 		update_user_meta( $user_id, 'wp-last-login', 0 );
