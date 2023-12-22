@@ -3,7 +3,7 @@
  * Plugin Name: WP Last Login
  * Plugin URI:  http://en.wp.obenland.it/wp-last-login/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Description: Displays the date of the last login in user lists.
- * Version:     6
+ * Version:     7
  * Author:      Konstantin Obenland
  * Author URI:  http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
@@ -53,6 +53,22 @@ function wpll_wp_login( $user_login ) {
 	update_user_meta( $user->ID, 'wp-last-login', time() );
 }
 add_action( 'wp_login', 'wpll_wp_login' );
+
+/**
+ * Update the login timestamp for two-factor authentication.
+ *
+ * The Two Factor plugin halts execution during the wp_login hook and the above
+ * callback is never fired.
+ * This callback is fired after the user has been authenticated with 2FA.
+ *
+ * @see https://github.com/WordPress/two-factor/blob/2b0d9bc964f9d9f7b86eac4eb0c4dbfb43c25c2c/class-two-factor-core.php#L567.
+ *
+ * @param WP_User $user The user object.
+ */
+function wpll_two_factor_user_authenticated( $user ) {
+	update_user_meta( $user->ID, 'wp-last-login', time() );
+}
+add_action( 'two_factor_user_authenticated', 'wpll_two_factor_user_authenticated' );
 
 /**
  * Set default data for new users.
@@ -126,7 +142,12 @@ function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
 			 */
 			$format     = apply_filters( 'wpll_date_format', get_option( 'date_format' ) );
 			$last_login = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $last_login ), 'U' );
-			$value      = date_i18n( $format, $last_login );
+			$value      = sprintf(
+				'<time title="%1$s" datetime="%2$s">%3$s</time>',
+				esc_attr( date_i18n( get_option( 'time_format' ), $last_login ) ),
+				esc_attr( gmdate( 'c', $last_login ) ),
+				esc_html( date_i18n( $format, $last_login ) )
+			);
 		}
 	}
 
