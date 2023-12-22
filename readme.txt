@@ -4,7 +4,7 @@ Tags: admin, user, login, last login, plugin, login time, login date
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 3.1
 Tested up to: 6.4
-Stable tag: 6
+Stable tag: 7
 
 Make the last login for each user visible in the user overview.
 
@@ -52,7 +52,10 @@ None asked yet.
 
 == Changelog ==
 
-= 6.0 =
+= 7 =
+* Added compatibility with Two Factor plugin. Props @bkno.
+
+= 6 =
 * Revamped file structure to remove unnecessary files.
 * Fixed a bug where login dates were overwritten on plugin reactivation. Props @richardbuff.
 
@@ -96,7 +99,7 @@ None asked yet.
 
 = 1.1.0 =
 * Made the display of the column filterable.
-* Widened the column a bit to accomodate for large date strings.
+* Widened the column a bit to accommodate for large date strings.
 
 = 1.0 =
 * Initial Release.
