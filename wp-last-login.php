@@ -142,7 +142,12 @@ function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
 			 */
 			$format     = apply_filters( 'wpll_date_format', get_option( 'date_format' ) );
 			$last_login = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $last_login ), 'U' );
-			$value      = date_i18n( $format, $last_login );
+			$value      = sprintf(
+				'<time title="%1$s" datetime="%2$s">%3$s</time>',
+				esc_attr( date_i18n( get_option( 'time_format' ), $last_login ) ),
+				esc_attr( gmdate( 'c', $last_login ) ),
+				esc_html( date_i18n( $format, $last_login ) )
+			);
 		}
 	}
 

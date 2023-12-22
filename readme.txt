@@ -54,6 +54,7 @@ None asked yet.
 
 = 7 =
 * Added compatibility with Two Factor plugin. Props @bkno.
+* Improved date display to display login time on hover.
 
 = 6 =
 * Revamped file structure to remove unnecessary files.
