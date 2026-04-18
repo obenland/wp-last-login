@@ -2,8 +2,9 @@
 Contributors: obenland
 Tags: admin, user, login, last login, plugin, login time, login date
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
-Requires at least: 3.1
+Requires at least: 6.5
 Tested up to: 6.8
+Requires PHP: 7.4
 Stable tag: 7
 
 Make the last login for each user visible in the user overview.

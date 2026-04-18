@@ -1,0 +1,47 @@
+{
+	"name": "wp-last-login",
+	"version": "7.0.0",
+	"private": true,
+	"description": "Displays the date of the last login in user lists.",
+	"author": "Konstantin Obenland",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"users",
+		"login",
+		"last login"
+	],
+	"homepage": "https://wordpress.org/plugins/wp-last-login/",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/obenland/wp-last-login.git"
+	},
+	"bugs": {
+		"url": "https://github.com/obenland/wp-last-login/issues"
+	},
+	"engines": {
+		"node": ">=24"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^11.4.0",
+		"@wordpress/scripts": "^32.0.0"
+	},
+	"scripts": {
+		"wp-env": "wp-env",
+		"start": "wp-env start",
+		"stop": "wp-env stop",
+		"destroy": "wp-env destroy",
+		"lint": "npm run lint:php && npm run lint:md && npm run lint:pkg-json",
+		"lint:fix": "npm run lint:php:fix",
+		"lint:php": "wp-env run cli --env-cwd=wp-content/plugins/wp-last-login ./vendor/bin/phpcs",
+		"lint:php:fix": "wp-env run cli --env-cwd=wp-content/plugins/wp-last-login ./vendor/bin/phpcbf",
+		"lint:md": "wp-scripts lint-md-docs",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"format": "wp-scripts format",
+		"test": "npm run test-php",
+		"test-php": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login composer test",
+		"test-php-multisite": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login composer test-multisite",
+		"test-php-coverage": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login composer test-coverage",
+		"get-coverage": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login cat coverage.xml > ./coverage.xml"
+	}
+}

@@ -1,33 +1,67 @@
-name: PHPCS check
+name: Coding Standards
+
 on:
-  push
+    push:
+        branches: [trunk]
+    pull_request:
+        branches: [trunk]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 jobs:
-  phpcs:
-    name: PHPCS check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    phpcs:
+        name: PHP Coding Standards
+        runs-on: ubuntu-latest
 
-      - name: Setup PHP
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "7.4"
-          ini-values: "memory_limit=1G"
-          coverage: none
-          tools: cs2pr
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v2"
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.3'
+                  tools: cs2pr
 
-      - name: Run PHPCS checks
-        continue-on-error: true
-        run: vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml --standard=WordPress --extensions=php --ignore="node_modules,vendor" .
+            - name: Cache Composer dependencies
+              uses: actions/cache@v4
+              id: composer-cache
+              with:
+                  path: vendor
+                  key: composer-${{ hashFiles('composer.json') }}
 
-      - name: Show PHPCS results in PR
-        run: cs2pr ./phpcs-report.xml
+            - name: Install PHP dependencies
+              if: steps.composer-cache.outputs.cache-hit != 'true'
+              run: composer install --prefer-dist --no-progress
+
+            - name: Run PHPCS
+              run: ./vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml
+
+            - name: Show PHPCS results in PR
+              if: ${{ always() && github.event_name == 'pull_request' }}
+              run: cs2pr ./phpcs-report.xml
+
+    docs-lint:
+        name: Docs / package.json Standards
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: npm
+
+            - name: Install npm dependencies
+              run: npm ci
+
+            - name: Run markdownlint
+              run: npm run lint:md
+
+            - name: Run package.json lint
+              run: npm run lint:pkg-json

@@ -1,0 +1,87 @@
+name: PHPUnit Coverage
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        paths-ignore:
+            - '**/*.md'
+            - 'readme.txt'
+            - 'lang/**'
+            - '.wordpress-org/**'
+            - '.distignore'
+            - '.editorconfig'
+            - '.gitignore'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    php-coverage:
+        name: 'PHP Coverage Analysis'
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        env:
+            WP_ENV_PHP_VERSION: '8.3'
+            WP_ENV_CORE: 'https://wordpress.org/wordpress-latest.zip'
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js (.nvmrc)
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: npm
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v4
+              id: composer-cache
+              with:
+                  path: vendor
+                  key: composer-coverage-${{ hashFiles('composer.json') }}
+
+            - name: Install PHP dependencies
+              if: steps.composer-cache.outputs.cache-hit != 'true'
+              run: composer update --prefer-dist --no-progress
+
+            - name: npm install
+              run: npm ci
+
+            - name: Install WordPress with Xdebug enabled
+              run: npm run wp-env start -- --xdebug=coverage
+
+            - name: Run PHPUnit with Coverage
+              id: phpunit
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  npm run test-php-coverage | tee coverage.log
+                  filtered_output=$(sed -n '/^Code Coverage Report:/,$p' coverage.log)
+                  echo "$filtered_output" | tee coverage-summary.txt
+                  {
+                      echo "coverage_summary<<EOF"
+                      echo "$filtered_output"
+                      echo "EOF"
+                  } >> "$GITHUB_ENV"
+
+            - name: Find Comment
+              uses: peter-evans/find-comment@v2
+              id: fc
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  comment-author: 'github-actions[bot]'
+                  body-includes: PHPUnit Coverage Report
+
+            - name: Create or Update Comment
+              uses: peter-evans/create-or-update-comment@v3
+              with:
+                  comment-id: ${{ steps.fc.outputs.comment-id }}
+                  issue-number: ${{ github.event.pull_request.number }}
+                  body: |
+                      ## PHPUnit Coverage Report
+
+                      ```yaml
+                      ${{ env.coverage_summary }}
+                      ```
+                  edit-mode: replace

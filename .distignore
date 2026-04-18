@@ -1,4 +1,5 @@
 # Directories
+/.claude
 /.git
 /.github
 /.idea
@@ -6,10 +7,22 @@
 /bin
 /node_modules
 /tests
+/vendor
 
 # Files
 .distignore
+.editorconfig
+.gitignore
+.nvmrc
+.phpunit.result.cache
+.prettierignore
+.wp-env.json
+CLAUDE.md
 composer.json
+composer.lock
+coverage.xml
 package.json
 package-lock.json
+phpcs-report.xml
+phpcs.xml.dist
 phpunit.xml

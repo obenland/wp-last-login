@@ -1,7 +1,7 @@
 {
   "landingPage": "\/wp-admin\/users.php",
   "preferredVersions": {
-    "php": "8.0",
+    "php": "8.3",
     "wp": "latest"
   },
   "steps": [
