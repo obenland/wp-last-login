@@ -20,7 +20,7 @@ Adds a sortable "Last Login" column to the Users screen — spot inactive accoun
 * Sortable "Last Login" column on the Users screen, including the network admin user list on multisite.
 * Hover any date to reveal the exact login time.
 * Captures logins via the standard `wp_login` action, so it works with any login flow that triggers it — including the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin, WooCommerce, BuddyBoss, and most social-login plugins.
-* "Never" is shown for users who haven't signed in since activation, and those users still sort correctly when ordered by last login.
+* Users without a recorded login show a neutral em-dash (—) — never a misleading "never" — and still sort correctly when ordered by last login.
 * Lightweight: one user meta key, no settings page, no extra database tables.
 * Filter hooks let you customize the date format or hide the column from non-admin roles.
 
@@ -34,9 +34,9 @@ Adds a sortable "Last Login" column to the Users screen — spot inactive accoun
 
 == Frequently Asked Questions ==
 
-= Why does the column show "Never" for all my users? =
+= Why does the column show an em-dash (—) for all my users? =
 
-The plugin records a login when a user signs in *after* it's been activated. WordPress doesn't store historical login data, so existing accounts will start populating their "Last Login" the next time each user logs in.
+The plugin records a login when a user signs in *after* it's been activated. WordPress doesn't store historical login data, so existing accounts will start populating their "Last Login" the next time each user logs in. Hovering the dash shows a tooltip explaining the same.
 
 = How do I change the date format or show the time? =
 

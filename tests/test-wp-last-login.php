@@ -79,14 +79,16 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that wpll_manage_users_custom_column returns "Never." when the
-	 * user has never logged in (meta is 0).
+	 * Tests that wpll_manage_users_custom_column renders an em-dash placeholder
+	 * with an explanatory tooltip when the user has no recorded login (meta is 0).
 	 */
-	public function test_manage_users_custom_column_never() {
+	public function test_manage_users_custom_column_renders_placeholder() {
 		$user_id = self::factory()->user->create();
 
 		$value = wpll_manage_users_custom_column( '', 'wp-last-login', $user_id );
-		$this->assertSame( 'Never.', $value );
+		$this->assertStringContainsString( '>—</span>', $value );
+		$this->assertStringContainsString( 'title="No login recorded since the plugin was activated."', $value );
+		$this->assertStringContainsString( 'aria-label="No login recorded since the plugin was activated."', $value );
 	}
 
 	/**
