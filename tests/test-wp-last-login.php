@@ -172,4 +172,72 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 		$this->assertSame( 'login', $query->query_vars['orderby'] );
 		$this->assertArrayNotHasKey( 'meta_key', $query->query_vars );
 	}
+
+	/**
+	 * Tests that wpll_load_textdomain registers a custom path for the
+	 * plugin's textdomain. Since WP 6.7+, load_plugin_textdomain defers
+	 * the actual load to just-in-time and instead records the path on
+	 * the global WP_Textdomain_Registry.
+	 */
+	public function test_load_textdomain_registers_path() {
+		global $wp_textdomain_registry;
+
+		wpll_load_textdomain();
+
+		$this->assertTrue( $wp_textdomain_registry->has( 'wp-last-login' ) );
+	}
+
+	/**
+	 * Tests that wpll_column_style outputs the column width CSS.
+	 */
+	public function test_column_style_outputs_css() {
+		ob_start();
+		wpll_column_style();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( '.column-wp-last-login', $output );
+		$this->assertStringContainsString( '<style>', $output );
+	}
+
+	/**
+	 * Tests that uninstall.php aborts via wp_die when WP_UNINSTALL_PLUGIN is
+	 * not defined. Declared before test_uninstall_deletes_meta to ensure the
+	 * constant is still undefined when this test runs (PHPUnit executes test
+	 * methods in declaration order by default, and once defined the constant
+	 * cannot be undefined).
+	 */
+	public function test_uninstall_aborts_without_constant() {
+		$handler = static function () {
+			return static function ( $message ) {
+				throw new RuntimeException( esc_html( (string) $message ) );
+			};
+		};
+		add_filter( 'wp_die_handler', $handler );
+
+		try {
+			require dirname( __DIR__ ) . '/uninstall.php';
+			$this->fail( 'Expected wp_die to be invoked.' );
+		} catch ( RuntimeException $e ) {
+			$this->assertSame( 'WP_UNINSTALL_PLUGIN undefined.', $e->getMessage() );
+		} finally {
+			remove_filter( 'wp_die_handler', $handler );
+		}
+	}
+
+	/**
+	 * Tests that uninstall.php deletes all wp-last-login user meta when
+	 * WP_UNINSTALL_PLUGIN is defined.
+	 */
+	public function test_uninstall_deletes_meta() {
+		$user_id = self::factory()->user->create();
+		update_user_meta( $user_id, 'wp-last-login', 1_700_000_000 );
+
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+			define( 'WP_UNINSTALL_PLUGIN', 'wp-last-login/wp-last-login.php' );
+		}
+
+		require dirname( __DIR__ ) . '/uninstall.php';
+
+		$this->assertSame( '', get_user_meta( $user_id, 'wp-last-login', true ) );
+	}
 }
