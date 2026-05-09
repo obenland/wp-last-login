@@ -1,11 +1,13 @@
 === WP Last Login ===
 Contributors: obenland
-Tags: admin, user, login, last login, plugin, login time, login date
+Tags: admin, user, login, last login, login date
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
 Stable tag: 7
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Make the last login for each user visible in the user overview.
 
