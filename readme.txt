@@ -42,17 +42,17 @@ The plugin records a login when a user signs in *after* it's been activated. Wor
 
 The date follows your site's general date format (Settings → General); the exact time appears on hover. To override the date format, use the `wpll_date_format` filter:
 
-`add_filter( 'wpll_date_format', function() {
-    return 'Y-m-d H:i';
-} );`
+    add_filter( 'wpll_date_format', function() {
+        return 'Y-m-d H:i';
+    } );
 
 = How do I hide the column from non-admin users? =
 
 Filter `wpll_current_user_can` and return a capability check. Login tracking still happens — only column visibility is gated:
 
-`add_filter( 'wpll_current_user_can', function() {
-    return current_user_can( 'manage_options' );
-} );`
+    add_filter( 'wpll_current_user_can', function() {
+        return current_user_can( 'manage_options' );
+    } );
 
 = Does it work with multisite, Two Factor, WooCommerce, BuddyBoss, or social login plugins? =
 
