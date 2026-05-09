@@ -131,7 +131,7 @@ add_filter( 'admin_print_styles-site-users.php', 'wpll_column_style' );
  */
 function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
 	if ( 'wp-last-login' === $column_name ) {
-		$tooltip    = __( 'No login recorded yet.', 'wp-last-login' );
+		$tooltip    = __( 'No login recorded since the plugin was activated.', 'wp-last-login' );
 		$value      = sprintf(
 			'<span title="%1$s" aria-label="%1$s">%2$s</span>',
 			esc_attr( $tooltip ),
