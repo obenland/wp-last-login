@@ -201,10 +201,12 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 
 	/**
 	 * Tests that uninstall.php aborts via wp_die when WP_UNINSTALL_PLUGIN is
-	 * not defined. Declared before test_uninstall_deletes_meta to ensure the
-	 * constant is still undefined when this test runs (PHPUnit executes test
-	 * methods in declaration order by default, and once defined the constant
-	 * cannot be undefined).
+	 * not defined. Runs in a separate PHP process so the constant defined by
+	 * test_uninstall_deletes_meta cannot leak in (PHP constants can't be
+	 * undefined once set, so this test would otherwise be order-dependent).
+	 *
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
 	 */
 	public function test_uninstall_aborts_without_constant() {
 		$handler = static function () {
