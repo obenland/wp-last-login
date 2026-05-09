@@ -87,8 +87,8 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 
 		$value = wpll_manage_users_custom_column( '', 'wp-last-login', $user_id );
 		$this->assertStringContainsString( '>—</span>', $value );
-		$this->assertStringContainsString( 'title="No login recorded since the plugin was activated."', $value );
-		$this->assertStringContainsString( 'aria-label="No login recorded since the plugin was activated."', $value );
+		$this->assertStringContainsString( 'title="No login recorded yet."', $value );
+		$this->assertStringContainsString( 'aria-label="No login recorded yet."', $value );
 	}
 
 	/**
