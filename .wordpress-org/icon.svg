@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+<title id="title">WP Last Login plugin icon</title>
+<desc id="desc">A simple user silhouette with a clock, representing login time tracking.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#004b81"/>
+    <stop offset="1" stop-color="#0073aa"/>
+  </linearGradient>
+</defs>
+<rect width="256" height="256" rx="44" fill="url(#bg)"/>
+<circle cx="108" cy="54" r="30" fill="#fff" opacity=".96"/>
+<path d="M44 149c0-33 28-60 64-60s64 27 64 60v35a12 12 0 0 1-12 12H56a12 12 0 0 1-12-12z" fill="#fff" opacity=".96"/>
+<circle cx="174" cy="174" r="68" fill="#004b81"/>
+<circle cx="174" cy="174" r="58" fill="none" stroke="#fff" stroke-width="10"/>
+<path d="M174 130v44l29 28" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="174" cy="174" r="7" fill="#fff"/>
+<path d="M174 117v9M174 222v9M126 174h9M222 174h9" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+</svg>
