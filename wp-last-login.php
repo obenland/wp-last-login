@@ -8,7 +8,7 @@
  * Author URI:  http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
  * Domain Path: /lang
- * License:     GPLv2
+ * License:     GPLv2 or later
  *
  * @package wp-last-login
  */
