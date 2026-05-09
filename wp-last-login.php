@@ -8,7 +8,7 @@
  * Author URI:  http://en.wp.obenland.it/#utm_source=wordpress&utm_medium=plugin&utm_campaign=wp-last-login
  * Text Domain: wp-last-login
  * Domain Path: /lang
- * License:     GPLv2
+ * License:     GPLv2 or later
  *
  * @package wp-last-login
  */
@@ -131,7 +131,12 @@ add_filter( 'admin_print_styles-site-users.php', 'wpll_column_style' );
  */
 function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
 	if ( 'wp-last-login' === $column_name ) {
-		$value      = __( 'Never.', 'wp-last-login' );
+		$tooltip    = __( 'No login recorded since the plugin was activated.', 'wp-last-login' );
+		$value      = sprintf(
+			'<span title="%1$s" aria-label="%1$s">%2$s</span>',
+			esc_attr( $tooltip ),
+			esc_html_x( '—', 'no last login recorded', 'wp-last-login' )
+		);
 		$last_login = (int) get_user_meta( $user_id, 'wp-last-login', true );
 
 		if ( $last_login ) {

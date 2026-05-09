@@ -79,14 +79,16 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that wpll_manage_users_custom_column returns "Never." when the
-	 * user has never logged in (meta is 0).
+	 * Tests that wpll_manage_users_custom_column renders an em-dash placeholder
+	 * with an explanatory tooltip when the user has no recorded login (meta is 0).
 	 */
-	public function test_manage_users_custom_column_never() {
+	public function test_manage_users_custom_column_renders_placeholder() {
 		$user_id = self::factory()->user->create();
 
 		$value = wpll_manage_users_custom_column( '', 'wp-last-login', $user_id );
-		$this->assertSame( 'Never.', $value );
+		$this->assertStringContainsString( '>—</span>', $value );
+		$this->assertStringContainsString( 'title="No login recorded since the plugin was activated."', $value );
+		$this->assertStringContainsString( 'aria-label="No login recorded since the plugin was activated."', $value );
 	}
 
 	/**
@@ -169,5 +171,75 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 
 		$this->assertSame( 'login', $query->query_vars['orderby'] );
 		$this->assertArrayNotHasKey( 'meta_key', $query->query_vars );
+	}
+
+	/**
+	 * Tests that wpll_load_textdomain registers a custom path for the
+	 * plugin's textdomain. Since WP 6.7+, load_plugin_textdomain defers
+	 * the actual load to just-in-time and instead records the path on
+	 * the global WP_Textdomain_Registry.
+	 */
+	public function test_load_textdomain_registers_path() {
+		global $wp_textdomain_registry;
+
+		wpll_load_textdomain();
+
+		$this->assertTrue( $wp_textdomain_registry->has( 'wp-last-login' ) );
+	}
+
+	/**
+	 * Tests that wpll_column_style outputs the column width CSS.
+	 */
+	public function test_column_style_outputs_css() {
+		ob_start();
+		wpll_column_style();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( '.column-wp-last-login', $output );
+		$this->assertStringContainsString( '<style>', $output );
+	}
+
+	/**
+	 * Tests that uninstall.php aborts via wp_die when WP_UNINSTALL_PLUGIN is
+	 * not defined. Runs in a separate PHP process so the constant defined by
+	 * test_uninstall_deletes_meta cannot leak in (PHP constants can't be
+	 * undefined once set, so this test would otherwise be order-dependent).
+	 *
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 */
+	public function test_uninstall_aborts_without_constant() {
+		$handler = static function () {
+			return static function ( $message ) {
+				throw new RuntimeException( esc_html( (string) $message ) );
+			};
+		};
+		add_filter( 'wp_die_handler', $handler );
+
+		try {
+			require dirname( __DIR__ ) . '/uninstall.php';
+			$this->fail( 'Expected wp_die to be invoked.' );
+		} catch ( RuntimeException $e ) {
+			$this->assertSame( 'WP_UNINSTALL_PLUGIN undefined.', $e->getMessage() );
+		} finally {
+			remove_filter( 'wp_die_handler', $handler );
+		}
+	}
+
+	/**
+	 * Tests that uninstall.php deletes all wp-last-login user meta when
+	 * WP_UNINSTALL_PLUGIN is defined.
+	 */
+	public function test_uninstall_deletes_meta() {
+		$user_id = self::factory()->user->create();
+		update_user_meta( $user_id, 'wp-last-login', 1_700_000_000 );
+
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+			define( 'WP_UNINSTALL_PLUGIN', 'wp-last-login/wp-last-login.php' );
+		}
+
+		require dirname( __DIR__ ) . '/uninstall.php';
+
+		$this->assertSame( '', get_user_meta( $user_id, 'wp-last-login', true ) );
 	}
 }
