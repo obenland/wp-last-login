@@ -43,15 +43,19 @@ jobs:
               if: steps.composer-cache.outputs.cache-hit != 'true'
               run: composer install --prefer-dist --no-progress
 
-            - name: npm install
-              run: npm ci
-
             - name: Cache Playwright browsers
               uses: actions/cache@v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
                   key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+            - name: npm install
+              env:
+                  # See playwright.yml: skip the postinstall browser
+                  # download so the cache restore above isn't redundant.
+                  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+              run: npm ci
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'

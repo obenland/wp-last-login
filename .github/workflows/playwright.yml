@@ -49,15 +49,21 @@ jobs:
                   node-version-file: '.nvmrc'
                   cache: npm
 
-            - name: npm install
-              run: npm ci
-
             - name: Cache Playwright browsers
               uses: actions/cache@v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
                   key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+            - name: npm install
+              env:
+                  # Playwright (transitive of @wordpress/scripts) downloads
+                  # browsers in its postinstall otherwise, which would race
+                  # the cache restore above and force a fresh download even
+                  # on cache hits.
+                  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+              run: npm ci
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
