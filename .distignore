@@ -4,6 +4,7 @@
 /.github
 /.idea
 /.wordpress-org
+/artifacts
 /bin
 /node_modules
 /tests
@@ -26,3 +27,4 @@ package-lock.json
 phpcs-report.xml
 phpcs.xml.dist
 phpunit.xml
+playwright.config.js

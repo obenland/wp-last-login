@@ -1,0 +1,86 @@
+name: Playwright
+
+on:
+    push:
+        branches: [trunk]
+        paths-ignore:
+            - '**/*.md'
+            - 'readme.txt'
+            - 'lang/**'
+            - '.wordpress-org/**'
+            - '.distignore'
+            - '.editorconfig'
+            - '.gitignore'
+    pull_request:
+        branches: [trunk]
+        paths-ignore:
+            - '**/*.md'
+            - 'readme.txt'
+            - 'lang/**'
+            - '.wordpress-org/**'
+            - '.distignore'
+            - '.editorconfig'
+            - '.gitignore'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    e2e:
+        name: 'Playwright (PHP ${{ matrix.php }} / WP ${{ matrix.wp }})'
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - php: '8.3'
+                      wp: 'latest'
+        env:
+            WP_ENV_PHP_VERSION: ${{ matrix.php }}
+            WP_ENV_CORE: ${{ matrix.wp == 'trunk' && 'WordPress/WordPress' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wp ) }}
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Setup Node.js (.nvmrc)
+              uses: actions/setup-node@v6
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: npm
+
+            - name: Cache Playwright browsers
+              uses: actions/cache@v5
+              id: playwright-cache
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+            - name: npm install
+              env:
+                  # Playwright (transitive of @wordpress/scripts) downloads
+                  # browsers in its postinstall otherwise, which would race
+                  # the cache restore above and force a fresh download even
+                  # on cache hits.
+                  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+              run: npm ci
+
+            - name: Install Playwright browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install --with-deps chromium
+
+            - name: Start WordPress
+              run: npm run wp-env start
+
+            - name: Run Playwright tests
+              env:
+                  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+              run: npm run test-e2e
+
+            - name: Upload artifacts on failure
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-artifacts-php${{ matrix.php }}-wp${{ matrix.wp }}
+                  path: artifacts/
+                  retention-days: 14

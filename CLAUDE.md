@@ -15,8 +15,9 @@ Local development runs inside `@wordpress/env` (Docker). Node `>=24` (pinned in 
 - `npm run start` — boot the wp-env container (WP latest, PHP 8.3, this plugin mounted). Once running, the admin is at `http://localhost:8888` (`admin` / `password`).
 - `npm run lint` — runs `lint:php`, `lint:md`, `lint:pkg-json` in sequence. Each can be invoked individually; `lint:php` / `lint:php:fix` run PHPCS/PHPCBF **inside the wp-env container** against `phpcs.xml.dist`.
 - `npm run format` — `wp-scripts format` (Prettier) over tracked files, honouring `.prettierignore`.
-- `npm run test-php` — runs PHPUnit inside the `tests-cli` container against single-site WordPress.
+- `npm run test-php` — runs PHPUnit inside the `tests-cli` container against single-site WordPress. The `--env-cwd` is computed by `bin/wp-env-run.js` from `path.basename(process.cwd())`, so the same script works in CI, regular checkouts, and worktrees with non-canonical directory names — no POSIX command substitution required.
 - `npm run test-php-multisite` — same, multisite. The plugin registers network columns, so run this before releases.
+- `npm run test-e2e` — runs Playwright against the wp-env tests environment at `http://localhost:8889`. Specs live in `tests/e2e/specs/`. Tests seed data by shelling out to `npx wp-env run tests-cli wp …` (see `tests/e2e/specs/last-login-sort.test.js`).
 - Need to run tests against a specific combination? Set `WP_ENV_PHP_VERSION` and `WP_ENV_CORE` before `npm run start` (see `.github/workflows/phpunit.yml` for the exact env shape).
 
 CI lives in `.github/workflows/`:

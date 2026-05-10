@@ -43,14 +43,42 @@ jobs:
               if: steps.composer-cache.outputs.cache-hit != 'true'
               run: composer install --prefer-dist --no-progress
 
+            - name: Cache Playwright browsers
+              uses: actions/cache@v5
+              id: playwright-cache
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
             - name: npm install
+              env:
+                  # See playwright.yml: skip the postinstall browser
+                  # download so the cache restore above isn't redundant.
+                  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
               run: npm ci
+
+            - name: Install Playwright browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install --with-deps chromium
 
             - name: Start WordPress (latest stable)
               run: npm run wp-env start
 
             - name: Run PHP unit tests against latest WordPress
               run: npm run test-php
+
+            - name: Run e2e tests against latest WordPress
+              env:
+                  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+              run: npm run test-e2e
+
+            - name: Upload Playwright artifacts on failure
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-artifacts-update-tested-up-to
+                  path: artifacts/
+                  retention-days: 14
 
     update:
         needs: validate

@@ -1,5 +1,6 @@
 /.claude/
 /.phpunit.result.cache
+/artifacts/
 /coverage.xml
 /node_modules/
 /vendor/
