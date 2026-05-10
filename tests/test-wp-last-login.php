@@ -152,6 +152,34 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that wpll_pre_get_users wraps an upstream meta_query with AND
+	 * instead of overwriting it, so other pre_get_users callbacks that add
+	 * meta_query constraints continue to apply when sorting by last login.
+	 */
+	public function test_pre_get_users_preserves_existing_meta_query() {
+		$existing          = array(
+			array(
+				'key'     => 'role_capability',
+				'value'   => 'editor',
+				'compare' => '=',
+			),
+		);
+		$query             = new WP_User_Query();
+		$query->query_vars = array(
+			'orderby'    => 'wp-last-login',
+			'meta_query' => $existing, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		);
+
+		wpll_pre_get_users( $query );
+
+		$this->assertSame( 'AND', $query->query_vars['meta_query']['relation'] );
+		$this->assertSame( $existing, $query->query_vars['meta_query'][0] );
+		$this->assertSame( 'OR', $query->query_vars['meta_query'][1]['relation'] );
+		$this->assertSame( 'EXISTS', $query->query_vars['meta_query'][1][0]['compare'] );
+		$this->assertSame( 'NOT EXISTS', $query->query_vars['meta_query'][1][1]['compare'] );
+	}
+
+	/**
 	 * Tests that wpll_pre_get_users ignores unrelated orderby values.
 	 */
 	public function test_pre_get_users_ignores_other_orderby() {

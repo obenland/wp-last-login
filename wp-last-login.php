@@ -165,20 +165,33 @@ function wpll_pre_get_users( $user_query ) {
 		 * without a `wp-last-login` row still appear in the result set. A
 		 * plain `meta_key` arg INNER-JOINs and silently drops them — see #4.
 		 */
+		$last_login_clause = array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'wp-last-login',
+				'compare' => 'EXISTS',
+			),
+			array(
+				'key'     => 'wp-last-login',
+				'compare' => 'NOT EXISTS',
+			),
+		);
+
+		/*
+		 * Preserve any meta_query a prior pre_get_users callback already
+		 * set so we don't clobber upstream filters.
+		 */
+		$existing   = isset( $user_query->query_vars['meta_query'] ) ? $user_query->query_vars['meta_query'] : array();
+		$meta_query = empty( $existing ) ? $last_login_clause : array(
+			'relation' => 'AND',
+			$existing,
+			$last_login_clause,
+		);
+
 		$user_query->query_vars = array_merge(
 			$user_query->query_vars,
 			array(
-				'meta_query' => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					'relation' => 'OR',
-					array(
-						'key'     => 'wp-last-login',
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => 'wp-last-login',
-						'compare' => 'NOT EXISTS',
-					),
-				),
+				'meta_query' => $meta_query, //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				'orderby'    => 'meta_value_num',
 			)
 		);
