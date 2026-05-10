@@ -40,15 +40,16 @@
 		"destroy": "wp-env destroy",
 		"lint": "npm run lint:php && npm run lint:md && npm run lint:pkg-json",
 		"lint:fix": "npm run lint:php:fix",
-		"lint:php": "wp-env run cli --env-cwd=wp-content/plugins/wp-last-login ./vendor/bin/phpcs",
-		"lint:php:fix": "wp-env run cli --env-cwd=wp-content/plugins/wp-last-login ./vendor/bin/phpcbf",
+		"lint:php": "wp-env run cli --env-cwd=wp-content/plugins/$(basename \"$PWD\") ./vendor/bin/phpcs",
+		"lint:php:fix": "wp-env run cli --env-cwd=wp-content/plugins/$(basename \"$PWD\") ./vendor/bin/phpcbf",
 		"lint:md": "wp-scripts lint-md-docs",
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
 		"format": "wp-scripts format",
 		"test": "npm run test-php",
-		"test-php": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login composer test",
-		"test-php-multisite": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login composer test-multisite",
-		"test-php-coverage": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login composer test-coverage",
-		"get-coverage": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/wp-last-login cat coverage.xml > ./coverage.xml"
+		"test-e2e": "wp-scripts test-playwright",
+		"test-php": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/$(basename \"$PWD\") composer test",
+		"test-php-multisite": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/$(basename \"$PWD\") composer test-multisite",
+		"test-php-coverage": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/$(basename \"$PWD\") composer test-coverage",
+		"get-coverage": "wp-env run tests-cli --env-cwd=/var/www/html/wp-content/plugins/$(basename \"$PWD\") cat coverage.xml > ./coverage.xml"
 	}
 }

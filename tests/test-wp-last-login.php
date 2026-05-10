@@ -57,20 +57,6 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that wpll_activate seeds a 0 timestamp on existing users that
-	 * don't yet have the meta key. Keeps never-logged-in users in sort
-	 * results after a plugin activation.
-	 */
-	public function test_activate_seeds_existing_users() {
-		$user_id = self::factory()->user->create();
-		delete_user_meta( $user_id, 'wp-last-login' );
-
-		wpll_activate();
-
-		$this->assertSame( 0, (int) get_user_meta( $user_id, 'wp-last-login', true ) );
-	}
-
-	/**
 	 * Tests that wpll_add_column adds the Last Login column.
 	 */
 	public function test_add_column_adds_key() {
@@ -148,7 +134,9 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that wpll_pre_get_users rewrites orderby to meta_value_num.
+	 * Tests that wpll_pre_get_users rewrites orderby to meta_value_num and
+	 * adds an EXISTS/NOT EXISTS meta_query so users with no meta row still
+	 * appear in sorted results.
 	 */
 	public function test_pre_get_users_rewrites_orderby() {
 		$query             = new WP_User_Query();
@@ -157,7 +145,10 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 		wpll_pre_get_users( $query );
 
 		$this->assertSame( 'meta_value_num', $query->query_vars['orderby'] );
-		$this->assertSame( 'wp-last-login', $query->query_vars['meta_key'] );
+		$this->assertSame( 'OR', $query->query_vars['meta_query']['relation'] );
+		$this->assertSame( 'wp-last-login', $query->query_vars['meta_query'][0]['key'] );
+		$this->assertSame( 'EXISTS', $query->query_vars['meta_query'][0]['compare'] );
+		$this->assertSame( 'NOT EXISTS', $query->query_vars['meta_query'][1]['compare'] );
 	}
 
 	/**
@@ -170,7 +161,7 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 		wpll_pre_get_users( $query );
 
 		$this->assertSame( 'login', $query->query_vars['orderby'] );
-		$this->assertArrayNotHasKey( 'meta_key', $query->query_vars );
+		$this->assertArrayNotHasKey( 'meta_query', $query->query_vars );
 	}
 
 	/**

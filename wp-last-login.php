@@ -14,28 +14,6 @@
  */
 
 /**
- * Sets a default meta value for all users.
- *
- * Allows sorting users by last login to work, even though some might not have
- * recorded login time.
- *
- * @see https://wordpress.org/support/topic/wp-40-sorting-by-date-doesnt-work
- */
-function wpll_activate() {
-	$user_ids = get_users(
-		array(
-			'blog_id' => '',
-			'fields'  => 'ID',
-		)
-	);
-
-	foreach ( $user_ids as $user_id ) {
-		add_user_meta( $user_id, 'wp-last-login', 0 );
-	}
-}
-register_activation_hook( __FILE__, 'wpll_activate' );
-
-/**
  * Loads the plugin's translated strings.
  */
 function wpll_load_textdomain() {
@@ -182,11 +160,26 @@ add_filter( 'manage_users-network_sortable_columns', 'wpll_add_sortable' );
  */
 function wpll_pre_get_users( $user_query ) {
 	if ( isset( $user_query->query_vars['orderby'] ) && 'wp-last-login' === $user_query->query_vars['orderby'] ) {
+		/*
+		 * EXISTS OR NOT EXISTS forces a LEFT JOIN against usermeta so users
+		 * without a `wp-last-login` row still appear in the result set. A
+		 * plain `meta_key` arg INNER-JOINs and silently drops them — see #4.
+		 */
 		$user_query->query_vars = array_merge(
 			$user_query->query_vars,
 			array(
-				'meta_key' => 'wp-last-login', //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'orderby'  => 'meta_value_num',
+				'meta_query' => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					'relation' => 'OR',
+					array(
+						'key'     => 'wp-last-login',
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => 'wp-last-login',
+						'compare' => 'NOT EXISTS',
+					),
+				),
+				'orderby'    => 'meta_value_num',
 			)
 		);
 	}
