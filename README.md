@@ -1,13 +1,14 @@
 # WP Last Login
+
 Contributors: obenland
 Tags: admin, user, login, last login, login date
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC
+Donate link: <https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC>
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 7
 License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License URI: <https://www.gnu.org/licenses/gpl-2.0.html>
 
 Adds a sortable "Last Login" column to the Users screen — spot inactive accounts and see who's actually using your site.
 
@@ -15,7 +16,7 @@ Adds a sortable "Last Login" column to the Users screen — spot inactive accoun
 
 **WP Last Login** records when each user signs in and surfaces it as a sortable column on the Users screen — so you can see who's active, identify dormant accounts, and confirm that real people are coming back.
 
-**Features**
+### Features
 
 * Sortable "Last Login" column on the Users screen, including the network admin user list on multisite.
 * Hover any date to reveal the exact login time.
@@ -71,56 +72,70 @@ Deactivating leaves stored login timestamps intact, so reactivating preserves hi
 ## Changelog
 
 ### 7
+
 * Added compatibility with Two Factor plugin. Props @bkno.
 * Improved date display to display login time on hover.
 
 ### 6
+
 * Revamped file structure to remove unnecessary files.
 * Fixed a bug where login dates were overwritten on plugin reactivation. Props @richardbuff.
 
 ### 5
+
 * Improved uninstall routine (no longer queries all users).
 * Updated utility class.
 * Tested with WordPress 6.1.
 
 ### 4
+
 * Improved date display to account for the timezone of the site. Props @knutsp.
 
 ### 3
-* Fixed a bug where users who haven't logged in disappear from user lists when ordering by last login. See https://wordpress.org/support/topic/new-users-dont-get-the-meta-field/
+
+* Fixed a bug where users who haven't logged in disappear from user lists when ordering by last login. See <https://wordpress.org/support/topic/new-users-dont-get-the-meta-field/>
 
 ### 2
+
 * Maintenance release.
 * Updated code to adhere to WordPress Coding Standards.
 * Tested with WordPress 5.0.
 
 ### 1.4.0
+
 * Fixed a long standing bug, where sorting users by last login didn't work.
 * Tested with WordPress 4.3.
 
 ### 1.3.0
+
 * Maintenance release.
 * Tested with WordPress 4.0.
 
 ### 1.2.1
+
 * Reverts changes to wp_login() as the second argument seems not to be set at all times.
 
 ### 1.2.0
+
 * Users are now sortable by last login!
 * Updated utility class.
 * Added Danish translation. Props thomasclausen.
 
 ### 1.1.2
+
 * Fixed a bug where content of other custom columns were not displayed.
 
 ### 1.1.1
+
 * Updated utility class.
 
 ### 1.1.0
+
 * Made the display of the column filterable.
 * Widened the column a bit to accommodate for large date strings.
 
 ### 1.0
+
 * Initial Release.
 
 
