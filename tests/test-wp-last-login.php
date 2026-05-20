@@ -288,6 +288,24 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that uninstall.php bails via wp_die when WP_UNINSTALL_PLUGIN is
+	 * undefined — the guard that stops the file from running outside the
+	 * WordPress uninstall path. Must run before test_uninstall_deletes_meta,
+	 * which defines the constant for the rest of the suite; PHPUnit's default
+	 * execution order preserves declaration order, so the position in this
+	 * class is load-bearing.
+	 */
+	public function test_uninstall_bails_without_constant() {
+		$this->assertFalse(
+			defined( 'WP_UNINSTALL_PLUGIN' ),
+			'WP_UNINSTALL_PLUGIN must be undefined for this test to exercise the guard.'
+		);
+
+		$this->expectException( WPDieException::class );
+		require dirname( __DIR__ ) . '/uninstall.php';
+	}
+
+	/**
 	 * Tests that uninstall.php deletes all wp-last-login user meta when
 	 * WP_UNINSTALL_PLUGIN is defined.
 	 */
