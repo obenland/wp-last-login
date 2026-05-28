@@ -12,10 +12,8 @@
 
 const { spawnSync } = require( 'node:child_process' );
 const fs = require( 'node:fs' );
-const path = require( 'node:path' );
 
-const dir = path.basename( process.cwd() );
-const envCwd = `/var/www/html/wp-content/plugins/${ dir }`;
+const envCwd = '/var/www/html/wp-content/plugins/wp-last-login';
 
 const result = spawnSync(
 	'npx',

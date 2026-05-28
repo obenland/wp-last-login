@@ -1,8 +1,13 @@
 {
 	"core": null,
 	"phpVersion": "8.3",
-	"plugins": [ "." ],
 	"testsEnvironment": false,
+	"mappings": {
+		"wp-content/plugins/wp-last-login": "."
+	},
+	"lifecycleScripts": {
+		"afterStart": "npx wp-env run cli wp plugin activate wp-last-login"
+	},
 	"config": {
 		"WP_DEBUG": true,
 		"WP_DEBUG_LOG": true,
