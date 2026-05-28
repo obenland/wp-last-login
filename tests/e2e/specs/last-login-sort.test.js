@@ -9,13 +9,16 @@ const { execSync } = require( 'node:child_process' );
 const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
 
 /**
- * Run a wp-cli command inside the wp-env tests container.
+ * Run a wp-cli command inside the wp-env development container.
+ *
+ * The e2e suite runs against the development site (port 8888), so data is
+ * seeded into that same `cli` container.
  *
  * @param {string} command wp-cli arguments (without the leading `wp`).
  * @return {string} Command stdout, trimmed.
  */
 function wpCli( command ) {
-	return execSync( `npx wp-env run tests-cli wp ${ command }`, {
+	return execSync( `npx wp-env run cli wp ${ command }`, {
 		encoding: 'utf8',
 		stdio: [ 'ignore', 'pipe', 'inherit' ],
 	} ).trim();
@@ -73,7 +76,9 @@ test.describe( 'Users › sort by Last Login', () => {
 
 		// WP renders both thead and tfoot column headers; scope to thead.
 		await expect(
-			page.locator( 'thead#the-list, table.wp-list-table thead' ).first()
+			page
+				.locator( 'thead#the-list, table.wp-list-table thead' )
+				.first()
 				.getByRole( 'columnheader', { name: /Last Login/ } )
 		).toBeVisible();
 	} );
@@ -93,10 +98,10 @@ test.describe( 'Users › sort by Last Login', () => {
 			expect( visible ).toContain( username );
 		}
 
-		const recent       = visible.indexOf( 'wpll_e2e_recent' );
-		const older        = visible.indexOf( 'wpll_e2e_older' );
-		const seeded       = visible.indexOf( 'wpll_e2e_seeded_zero' );
-		const noMeta       = visible.indexOf( 'wpll_e2e_no_meta' );
+		const recent = visible.indexOf( 'wpll_e2e_recent' );
+		const older = visible.indexOf( 'wpll_e2e_older' );
+		const seeded = visible.indexOf( 'wpll_e2e_seeded_zero' );
+		const noMeta = visible.indexOf( 'wpll_e2e_no_meta' );
 		const lastLoggedIn = Math.max( recent, older );
 
 		// Recent timestamp comes before older, both come before never-logged-in.
@@ -120,10 +125,10 @@ test.describe( 'Users › sort by Last Login', () => {
 			expect( visible ).toContain( username );
 		}
 
-		const recent        = visible.indexOf( 'wpll_e2e_recent' );
-		const older         = visible.indexOf( 'wpll_e2e_older' );
-		const seeded        = visible.indexOf( 'wpll_e2e_seeded_zero' );
-		const noMeta        = visible.indexOf( 'wpll_e2e_no_meta' );
+		const recent = visible.indexOf( 'wpll_e2e_recent' );
+		const older = visible.indexOf( 'wpll_e2e_older' );
+		const seeded = visible.indexOf( 'wpll_e2e_seeded_zero' );
+		const noMeta = visible.indexOf( 'wpll_e2e_no_meta' );
 		const firstLoggedIn = Math.min( recent, older );
 
 		// Never-logged-in users come before timestamped, older before recent.

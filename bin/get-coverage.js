@@ -3,8 +3,8 @@
 /**
  * Cross-platform npm-script entry for `npm run get-coverage`.
  *
- * Reads coverage.xml from the tests-cli container and writes it to the
- * host workspace. Avoids the POSIX `> coverage.xml` redirect so the
+ * Reads coverage.xml from the test environment's `cli` container and writes
+ * it to the host workspace. Avoids the POSIX `> coverage.xml` redirect so the
  * script works on Windows cmd.exe.
  */
 
@@ -12,17 +12,17 @@
 
 const { spawnSync } = require( 'node:child_process' );
 const fs = require( 'node:fs' );
-const path = require( 'node:path' );
 
-const dir = path.basename( process.cwd() );
-const envCwd = `/var/www/html/wp-content/plugins/${ dir }`;
+const envCwd = '/var/www/html/wp-content/plugins/wp-last-login';
 
 const result = spawnSync(
 	'npx',
 	[
 		'wp-env',
+		'--config',
+		'.wp-env.tests.json',
 		'run',
-		'tests-cli',
+		'cli',
 		`--env-cwd=${ envCwd }`,
 		'cat',
 		'coverage.xml',

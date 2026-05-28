@@ -64,7 +64,7 @@ jobs:
               run: npm ci
 
             - name: Install WordPress
-              run: npm run wp-env start
+              run: npm run start:tests
 
             - name: Running unit tests
               run: npm run test-php

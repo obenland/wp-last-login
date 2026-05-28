@@ -18,6 +18,7 @@
 .phpunit.result.cache
 .prettierignore
 .wp-env.json
+.wp-env.tests.json
 CLAUDE.md
 composer.json
 composer.lock
