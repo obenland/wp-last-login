@@ -120,6 +120,9 @@ jobs:
             - name: Start WordPress (latest stable)
               run: npm run wp-env start
 
+            - name: Start WordPress test environment
+              run: npm run start:tests
+
             - name: Run PHP unit tests against latest WordPress
               run: npm run test-php
 

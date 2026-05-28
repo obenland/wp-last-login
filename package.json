@@ -43,6 +43,9 @@
 		"start": "wp-env start",
 		"stop": "wp-env stop",
 		"destroy": "wp-env destroy",
+		"start:tests": "wp-env start --config .wp-env.tests.json",
+		"stop:tests": "wp-env stop --config .wp-env.tests.json",
+		"destroy:tests": "wp-env destroy --config .wp-env.tests.json",
 		"lint": "npm run lint:php && npm run lint:md && npm run lint:pkg-json",
 		"lint:fix": "npm run lint:php:fix",
 		"lint:php": "node bin/wp-env-run.js cli ./vendor/bin/phpcs",
@@ -52,9 +55,9 @@
 		"format": "wp-scripts format",
 		"test": "npm run test-php",
 		"test-e2e": "wp-scripts test-playwright",
-		"test-php": "node bin/wp-env-run.js tests-cli composer test",
-		"test-php-multisite": "node bin/wp-env-run.js tests-cli composer test-multisite",
-		"test-php-coverage": "node bin/wp-env-run.js tests-cli composer test-coverage",
+		"test-php": "node bin/wp-env-run.js --config .wp-env.tests.json cli composer test",
+		"test-php-multisite": "node bin/wp-env-run.js --config .wp-env.tests.json cli composer test-multisite",
+		"test-php-coverage": "node bin/wp-env-run.js --config .wp-env.tests.json cli composer test-coverage",
 		"get-coverage": "node bin/get-coverage.js"
 	}
 }
