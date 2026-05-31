@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@wordpress/env": "^11.7.0",
-		"@wordpress/scripts": "^32.2.0"
+		"@wordpress/scripts": "^32.3.0"
 	},
 	"overrides": {
 		"serialize-javascript": "^7.0.5",
