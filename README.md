@@ -73,6 +73,9 @@ Deactivating leaves stored login timestamps intact, so reactivating preserves hi
 
 ### 8
 
+* Fixed users with no recorded login being dropped from the list when sorting by Last Login.
+* Removed the activation routine that seeded a default value for every existing user, which could time out on sites with large user bases. Sorting no longer depends on it. Props @fwielstra.
+* Replaced the "Never." placeholder with a neutral em-dash and an explanatory tooltip.
 * Raised the minimum PHP version to 8.1. PHP 7.4 and 8.0 reached end of life and no longer receive security updates.
 * Tested up to WordPress 7.1.
 
