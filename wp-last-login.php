@@ -13,6 +13,10 @@
  * @package wp-last-login
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Loads the plugin's translated strings.
  */
