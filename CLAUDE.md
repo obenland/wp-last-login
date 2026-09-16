@@ -23,7 +23,7 @@ Local development runs inside `@wordpress/env` (Docker). Node `>=24` (pinned in 
 CI lives in `.github/workflows/`:
 
 - `wpcs.yml` — PHPCS (PHP 8.3, `phpcs.xml.dist`) + markdownlint + package.json lint (`npm run lint:md` / `lint:pkg-json`).
-- `phpunit.yml` — three-row matrix: **PHP 7.4 / WP 6.5** (floor), **PHP 8.3 / WP latest**, **PHP 8.5 / WP trunk** (nightly canary).
+- `phpunit.yml` — three-row matrix: **PHP 8.1 / WP 6.5** (floor), **PHP 8.3 / WP latest**, **PHP 8.5 / WP trunk** (nightly canary). The floor row cannot go below PHP 8.1: `wordpress:php7.4` and `wordpress:php8.0` are Debian 11 images, and wp-env's `apt-get install $PHPIZE_DEPS` now 404s against the archived bullseye pool.
 
 ## Architecture
 
@@ -63,7 +63,7 @@ Column functions are registered on three column filters — `manage_users_column
 - WordPress Coding Standards (enforced by CI via `phpcs.xml.dist`, which layers `PHPCompatibilityWP` on top of `WordPress`). Yoda conditions, `snake_case`, `wpll_` prefix on every global function.
 - Escape on output (`esc_attr`, `esc_html`, `date_i18n`) — follow the pattern in `wpll_manage_users_custom_column` when adding markup.
 - Bump both the `Version:` header in `wp-last-login.php` and `Stable tag:` in `readme.txt` together. Add a matching `== Changelog ==` entry in `readme.txt`, and bump `Tested up to:` when verifying against a new WordPress release. `Requires at least:` (WP) and `Requires PHP:` must match what CI's PHPUnit matrix actually exercises.
-- Supported PHP range: **7.4 – 8.5**, declared in `composer.json` as `">=7.4"`, in `readme.txt` as `Requires PHP: 7.4`, pinned via `<config name="testVersion" value="7.4-"/>` in `phpcs.xml.dist`, and exercised by the PHPUnit matrix. Avoid language features newer than 7.4 (no `match`, no named args, no enums, no readonly/typed promoted properties) — PHPCompatibilityWP will flag them.
+- Supported PHP range: **8.1 – 8.5**, declared in `composer.json` as `">=8.1"` (and `config.platform.php`), in `README.md` as `Requires PHP: 8.1`, pinned via `<config name="testVersion" value="8.1-"/>` in `phpcs.xml.dist`, and exercised by the PHPUnit matrix. Avoid language features newer than 8.1 (no `readonly` classes, no `json_validate()`) — PHPCompatibilityWP will flag them.
 
 ## Release
 
