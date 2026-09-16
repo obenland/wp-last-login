@@ -4,9 +4,9 @@ Contributors: obenland
 Tags: admin, user, login, last login, login date
 Donate link: <https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K32M878XHREQC>
 Requires at least: 6.5
-Tested up to: 7.0
-Requires PHP: 7.4
-Stable tag: 7
+Tested up to: 7.1
+Requires PHP: 8.1
+Stable tag: 8
 License: GPLv2 or later
 License URI: <https://www.gnu.org/licenses/gpl-2.0.html>
 
@@ -70,6 +70,11 @@ Deactivating leaves stored login timestamps intact, so reactivating preserves hi
 
 
 ## Changelog
+
+### 8
+
+* Raised the minimum PHP version to 8.1. PHP 7.4 and 8.0 reached end of life and no longer receive security updates.
+* Tested up to WordPress 7.1.
 
 ### 7
 

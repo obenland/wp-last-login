@@ -1,6 +1,6 @@
 {
 	"name": "wp-last-login",
-	"version": "7.0.0",
+	"version": "8.0.0",
 	"private": true,
 	"description": "Displays the date of the last login in user lists.",
 	"author": "Konstantin Obenland",
