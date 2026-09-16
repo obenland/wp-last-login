@@ -90,7 +90,7 @@ test.describe( 'Users › sort by Last Login', () => {
 			'/wp-admin/users.php?orderby=wp-last-login&order=desc'
 		);
 
-		// WP 7.0 made the primary column a <th>, so match on class, not <td>.
+		// WP 7.1 made the primary column a <th>, so match on class, not <td>.
 		const visible = await page
 			.locator( '#the-list tr .column-username strong a' )
 			.allInnerTexts();
@@ -118,7 +118,7 @@ test.describe( 'Users › sort by Last Login', () => {
 			'/wp-admin/users.php?orderby=wp-last-login&order=asc'
 		);
 
-		// WP 7.0 made the primary column a <th>, so match on class, not <td>.
+		// WP 7.1 made the primary column a <th>, so match on class, not <td>.
 		const visible = await page
 			.locator( '#the-list tr .column-username strong a' )
 			.allInnerTexts();
