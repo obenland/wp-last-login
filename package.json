@@ -23,7 +23,7 @@
 		"node": ">=24"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^11.15.0",
+		"@wordpress/env": "^11.16.0",
 		"@wordpress/scripts": "^35.0.0"
 	},
 	"overrides": {
