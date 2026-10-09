@@ -112,31 +112,13 @@ add_filter( 'admin_print_styles-site-users.php', 'wpll_column_style' );
  * @return string
  */
 function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
-	if ( 'wp-last-login' === $column_name ) {
-		$last_login = (int) get_user_meta( $user_id, 'wp-last-login', true );
+	if ( 'wp-last-login' !== $column_name ) {
+		return $value;
+	}
 
-		if ( ! $last_login ) {
-			$tooltip = __( 'No login recorded since the plugin was activated.', 'wp-last-login' );
-			$value   = sprintf(
-				'<span title="%1$s" aria-label="%1$s">%2$s</span>',
-				esc_attr( $tooltip ),
-				esc_html_x( '—', 'no last login recorded', 'wp-last-login' )
-			);
+	$last_login = (int) get_user_meta( $user_id, 'wp-last-login', true );
 
-			/**
-			 * Filters the column output for users without a recorded login.
-			 *
-			 * The value is already-escaped HTML; callbacks returning custom
-			 * markup are responsible for escaping it.
-			 *
-			 * @since 9
-			 *
-			 * @param string $value   Placeholder markup. Default: an em-dash with an explanatory tooltip.
-			 * @param int    $user_id The user's ID.
-			 */
-			return apply_filters( 'wpll_no_login_output', $value, $user_id );
-		}
-
+	if ( $last_login ) {
 		/**
 		 * Date format to use with last login date.
 		 *
@@ -144,7 +126,8 @@ function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
 		 */
 		$format     = apply_filters( 'wpll_date_format', get_option( 'date_format' ) );
 		$last_login = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $last_login ), 'U' );
-		$value      = sprintf(
+
+		return sprintf(
 			'<time title="%1$s" datetime="%2$s">%3$s</time>',
 			esc_attr( date_i18n( get_option( 'time_format' ), $last_login ) ),
 			esc_attr( gmdate( 'c', $last_login ) ),
@@ -152,7 +135,25 @@ function wpll_manage_users_custom_column( $value, $column_name, $user_id ) {
 		);
 	}
 
-	return $value;
+	$tooltip = __( 'No login recorded since the plugin was activated.', 'wp-last-login' );
+	$value   = sprintf(
+		'<span title="%1$s" aria-label="%1$s">%2$s</span>',
+		esc_attr( $tooltip ),
+		esc_html_x( '—', 'no last login recorded', 'wp-last-login' )
+	);
+
+	/**
+	 * Filters the column output for users without a recorded login.
+	 *
+	 * The value is already-escaped HTML; callbacks returning custom
+	 * markup are responsible for escaping it.
+	 *
+	 * @since 9
+	 *
+	 * @param string $value   Placeholder markup. Default: an em-dash with an explanatory tooltip.
+	 * @param int    $user_id The user's ID.
+	 */
+	return apply_filters( 'wpll_no_login_output', $value, $user_id );
 }
 add_filter( 'manage_users_custom_column', 'wpll_manage_users_custom_column', 10, 3 );
 
