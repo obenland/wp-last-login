@@ -95,6 +95,54 @@ class Test_WP_Last_Login extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the wpll_no_login_output filter receives the default
+	 * placeholder markup and the user ID, and that its return value
+	 * replaces the column output for users without a recorded login.
+	 */
+	public function test_manage_users_custom_column_honours_no_login_output_filter() {
+		$user_id  = self::factory()->user->create();
+		$received = array();
+
+		$filter = static function ( $value, $filtered_user_id ) use ( &$received ) {
+			$received = array( $value, $filtered_user_id );
+			return '(No logins since October 9, 2026)';
+		};
+		add_filter( 'wpll_no_login_output', $filter, 10, 2 );
+
+		try {
+			$value = wpll_manage_users_custom_column( '', 'wp-last-login', $user_id );
+		} finally {
+			remove_filter( 'wpll_no_login_output', $filter );
+		}
+
+		$this->assertSame( '(No logins since October 9, 2026)', $value );
+		$this->assertStringContainsString( '>—</span>', $received[0] );
+		$this->assertSame( $user_id, $received[1] );
+	}
+
+	/**
+	 * Tests that the wpll_no_login_output filter is not applied when the
+	 * user has a recorded login.
+	 */
+	public function test_manage_users_custom_column_skips_no_login_output_filter_with_login() {
+		$user_id = self::factory()->user->create();
+		update_user_meta( $user_id, 'wp-last-login', 1_700_000_000 );
+
+		$filter = static function () {
+			return 'filtered';
+		};
+		add_filter( 'wpll_no_login_output', $filter );
+
+		try {
+			$value = wpll_manage_users_custom_column( '', 'wp-last-login', $user_id );
+		} finally {
+			remove_filter( 'wpll_no_login_output', $filter );
+		}
+
+		$this->assertStringContainsString( '<time', $value );
+	}
+
+	/**
 	 * Tests that wpll_manage_users_custom_column renders a <time> element
 	 * with a UTC `datetime` attribute when the user has a login timestamp.
 	 */
