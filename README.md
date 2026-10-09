@@ -6,7 +6,7 @@ Donate link: <https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 8
+Stable tag: 9
 License: GPLv2 or later
 License URI: <https://www.gnu.org/licenses/gpl-2.0.html>
 
@@ -23,7 +23,7 @@ Adds a sortable "Last Login" column to the Users screen — spot inactive accoun
 * Captures logins via the standard `wp_login` action, so it works with any login flow that triggers it — including the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin, WooCommerce, BuddyBoss, and most social-login plugins.
 * Users without a recorded login show a neutral em-dash (—) — never a misleading "never" — and still sort correctly when ordered by last login.
 * Lightweight: one user meta key, no settings page, no extra database tables.
-* Filter hooks let you customize the date format or hide the column from non-admin roles.
+* Filter hooks let you customize the date format, the placeholder shown for users without a recorded login, or hide the column from non-admin roles.
 
 
 ## Installation
@@ -46,6 +46,14 @@ The date follows your site's general date format (Settings → General); the exa
     add_filter( 'wpll_date_format', function() {
         return 'Y-m-d H:i';
     } );
+
+### How do I change what's shown for users without a recorded login?
+
+Filter `wpll_no_login_output`. It receives the default placeholder markup and the user ID, and whatever you return is printed as-is, so escape any custom output:
+
+    add_filter( 'wpll_no_login_output', function( $output, $user_id ) {
+        return esc_html__( '(No logins since October 9, 2026)', 'my-textdomain' );
+    }, 10, 2 );
 
 ### How do I hide the column from non-admin users?
 
@@ -70,6 +78,10 @@ Deactivating leaves stored login timestamps intact, so reactivating preserves hi
 
 
 ## Changelog
+
+### 9
+
+* Added the `wpll_no_login_output` filter to customize what is displayed for users without a recorded login. See <https://wordpress.org/support/topic/feature-request-filter-the-for-users-without-login-data/>
 
 ### 8
 
@@ -159,3 +171,8 @@ Deactivating leaves stored login timestamps intact, so reactivating preserves hi
 
 **wpll_date_format** (*string*)
 > The date format string for the date output.
+
+
+**wpll_no_login_output** (*string*, *int*)
+> The markup displayed for users without a recorded login, and the user's ID.
+> Default: an em-dash with an explanatory tooltip
